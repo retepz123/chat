@@ -91,7 +91,7 @@ function Registration() {
         </div>
 
         <button type='submit'>Submit</button>
-        <Link to='/login'>Login</Link>
+        <Link to='/login' className='text-black-500'>Login</Link>
       </form>
     </div>
   );
