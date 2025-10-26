@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -24,6 +25,8 @@ function LoginPage() {
         localStorage.setItem('user', JSON.stringify(data.user));
         console.log('Login Successfully:', data);
 
+          setLoggedIn(true);
+
       } else {
         console.error('Login failed:', data.message);
         alert(data.message || 'Invalid username and password');
@@ -34,6 +37,15 @@ function LoginPage() {
     alert("Something went wrong. Please check your internet connection or try again later.");
     }
   }
+
+  useEffect(() => {
+    if (loggedIn) {
+      const timer = setTimeout(() =>{
+        navigate('/chat');
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [loggedIn, navigate]);
 
   return ( 
     <div>

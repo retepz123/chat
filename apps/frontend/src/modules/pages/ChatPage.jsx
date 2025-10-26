@@ -23,7 +23,7 @@ function ChatPage() {
       return;
 
     const messageData = {
-      senderId,
+      senderId: user?._id,
       content,
       room,
       attachments: [],

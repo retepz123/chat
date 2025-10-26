@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast'; // ✅ corrected import
+import { Link } from 'react-router-dom';
 
 const SIGN_UP_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`;
 
@@ -90,6 +91,7 @@ function Registration() {
         </div>
 
         <button type='submit'>Submit</button>
+        <Link to='/login'>Login</Link>
       </form>
     </div>
   );

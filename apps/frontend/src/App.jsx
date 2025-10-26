@@ -13,7 +13,7 @@ function App() {
      <Routes>
       <Route element={<Registration />} path='/' />
       <Route element={<LoginPage />} path='/login' />
-      <Route element={<ChatPage />} path='chat' />
+      <Route element={<ChatPage />} path='/chat' />
      </Routes>
      </BrowserRouter>
   );
