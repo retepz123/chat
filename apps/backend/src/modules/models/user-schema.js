@@ -14,6 +14,10 @@ const userSchema = new Schema ({
   email: {
     type: String,
   },
+  online: {
+    type: Boolean,
+    default: false
+  },
   
 
 }, {timestamps: true});

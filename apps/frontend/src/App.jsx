@@ -2,6 +2,7 @@ import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } fro
 import { Toaster } from 'react-hot-toast';
 import Registration from './modules/pages/Registration';
 import LoginPage from './modules/pages/Login';
+import ChatPage from './modules/pages/ChatPage';
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
      <Routes>
       <Route element={<Registration />} path='/' />
       <Route element={<LoginPage />} path='/login' />
+      <Route element={<ChatPage />} path='chat' />
      </Routes>
      </BrowserRouter>
   );

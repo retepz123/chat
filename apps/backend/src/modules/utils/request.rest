@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ###login
-# @prompt username
+# @prompt username 
 # @prompt password
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
@@ -19,3 +19,25 @@ Content-Type: application/json
   "username": "{{username}}",
   "password": "{{password}}"
 }
+
+### create message https://www.facebook.com/photo.php?fbid=2846361688866577&set=t.100028294564758&type=3
+# @prompt senderId
+# @prompt content
+# @prompt room
+# @prompt url
+# @prompt type
+POST http://localhost:3000/api/v1/send
+Content-Type: application/json
+
+{
+  "senderId": "{{senderId}}",
+  "content": "{{content}}",
+  "room": "{{room}}",
+  "attachments": {
+    "url": "{{url}}",
+    "type": "{{type}}"
+  }
+}
+
+### all messages
+GET http://localhost:3000/api/v1/all/general
