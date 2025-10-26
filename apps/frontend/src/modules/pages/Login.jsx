@@ -1,0 +1,55 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
+const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
+
+function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+      if(res.ok){
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('Login Successfully:', data);
+
+      } else {
+        console.error('Login failed:', data.message);
+        alert(data.message || 'Invalid username and password');
+      }
+
+    } catch (err) {
+      console.error("Network or server error:", err);
+    alert("Something went wrong. Please check your internet connection or try again later.");
+    }
+  }
+
+  return ( 
+    <div>
+      <form onSubmit={handleLogin}>
+        <h1>Login</h1>
+        <div>
+          <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <input type='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </div>
+        <div>
+          <button type='submit'>Submit</button>
+        </div>
+      </form>
+
+    </div>
+  );
+}
+
+export default LoginPage;
