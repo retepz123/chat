@@ -2,6 +2,7 @@ import { User } from '../models/user-schema.js';
 import bcrypt from 'bcryptjs';
 
 export async function validateLogin(req, res, next) {
+  console.log('req.user:', req.user);
   try {
     if (!req.body) {
       return res.status(400).json({ message: 'No request body provided' });
