@@ -18,7 +18,17 @@ function LoginPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await res.json();
+      let data;
+        data = await res.json();
+      try {
+
+      } catch{
+        const text =await res.text();
+        console.error('Non-JSON response from server:', text);
+      alert('Server error: invalid response format.');
+      return;
+      }
+
       if(res.ok){
 
         localStorage.setItem('token', data.token);
