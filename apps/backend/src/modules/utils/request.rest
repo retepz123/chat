@@ -20,7 +20,7 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
-### create message https://www.facebook.com/photo.php?fbid=2846361688866577&set=t.100028294564758&type=3
+### create message
 # @prompt senderId
 # @prompt content
 # @prompt room
