@@ -2,7 +2,6 @@ import { User } from '../models/user-schema.js';
 import bcrypt from 'bcryptjs';
 
 export async function validateLogin(req, res, next) {
-  console.log('req.user:', req.user);
   try {
     if (!req.body) {
       return res.status(400).json({ message: 'No request body provided' });
@@ -17,6 +16,7 @@ export async function validateLogin(req, res, next) {
     }
 
     const user = await User.findOne({ username });
+    console.log('User found in DB:', user);
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
@@ -26,9 +26,11 @@ export async function validateLogin(req, res, next) {
     if (!isMatch) return res.status(401).json({ message: 'Wrong credentials' });
 
     req.user = user;
+    console.log('req.user set in middleware:', req.user);
     next();
+
   } catch (err) {
     console.error('Error in validateLogin middleware:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error in middleware' });
   }
 }

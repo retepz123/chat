@@ -1,4 +1,5 @@
 import { User } from '../models/user-schema.js';
+import bcrypt from 'bcryptjs';
 
 export async function validateRegister(req, res, next) {
   console.log('Request body', req.body);
@@ -15,6 +16,13 @@ export async function validateRegister(req, res, next) {
     if(existing){
       return res.status(409).json({ message: 'Already have'});
     }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Pass hashed password to next middleware/controller
+    req.body.hashedPassword = hashedPassword;
+
     next();
 
   } catch (err){
