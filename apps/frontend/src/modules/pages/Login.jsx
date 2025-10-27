@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
+const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}api/auth/login`;
 
 function LoginPage() {
   const [username, setUsername] = useState("");
