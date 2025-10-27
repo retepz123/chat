@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}api/auth/login`;
+const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -18,16 +18,16 @@ function LoginPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      let data;
-        data = await res.json();
+     let data;
       try {
-
-      } catch{
-        const text =await res.text();
+        data = await res.json();
+      } catch {
+        const text = await res.text();
         console.error('Non-JSON response from server:', text);
-      alert('Server error: invalid response format.');
-      return;
+        alert('Server error: invalid response format.');
+        return;
       }
+
 
       if(res.ok){
 
