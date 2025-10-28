@@ -21,3 +21,24 @@ export function validateMessage(req, res, next) {
     return res.status(500).json({ message: 'Internal server Error in middleware message'});
   }
 }
+
+export async function sendMessageSocket(Msgdata){
+  try {
+    const sender = await User.findById(Msgdata.senderId);
+    if (!sender) throw new Error('Cannot find the user');
+
+    const newMessage = await Message.create ({
+       sender: msgData.senderId,
+      content: msgData.content,
+      room: msgData.room,
+      attachments: msgData.attachments || [],
+    });
+
+      await newMessage.populate('sender', 'username email');
+      return newMessage;
+
+  } catch (err) {
+      console.error('Error sending message via socket:', err);
+    throw err;
+  }
+}

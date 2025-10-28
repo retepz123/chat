@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getMessages, sendMessage } from '../components/api';
+import io from 'socket.io-client';
+
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 function ChatPage() {
   const [message, setMessage] = useState([]);
