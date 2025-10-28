@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
+const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('https://chat-me-qf7o.onrender.com/api/auth/login', {
+      const res = await fetch(LOGIN_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ username, password }),

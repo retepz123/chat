@@ -2,33 +2,40 @@ import { User } from '../models/user-schema.js';
 import bcrypt from 'bcryptjs';
 
 export async function validateRegister(req, res, next) {
-console.log('🟢 Entered validateRegister middleware');
-console.log('Request body:', req.body);
+  console.log('🟩 Middleware Triggered');
+  console.log('Request body:', req.body);
 
   try {
-    const { username, password} = req.body;
+    const { username, password } = req.body;
+    console.log('Extracted -> username:', username, '| password:', password);
 
-    //validate the input
+    // Validate input
     if (!username || !password) {
-      return res.status(400).json({ message: 'Username and Password are required'});
+      console.log('❌ Missing username or password');
+      return res.status(400).json({ message: 'Username and Password are required' });
     }
 
-    //if user is existing
-    const existing = await User.findOne({ username: username});
-    if(existing){
-      return res.status(409).json({ message: 'Already have'});
+    // Check existing user
+    console.log('🔎 Checking for existing user...');
+    const existing = await User.findOne({ username: username });
+    console.log('Existing user found:', existing);
+
+    if (existing) {
+      console.log('⚠️ User already exists');
+      return res.status(409).json({ message: 'Already have' });
     }
 
-    // Hash the password
+    // Hash password
+    console.log('🔐 Hashing password...');
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('✅ Hashed password generated');
 
-    // Pass hashed password to next middleware/controller
-    req.body.password = hashedPassword;
-
+    req.body.hashedPassword = hashedPassword;
+    console.log('➡️ Passing to next middleware/controller');
     next();
 
-  } catch (err){
-    console.error('Error in Validate Registration:', err);
-    return res.status(500).json({ message: 'Internal server in Middleware'});
+  } catch (err) {
+    console.error('💥 Error in Validate Registration:', err);
+    return res.status(500).json({ message: 'Internal server in Middleware' });
   }
 }
