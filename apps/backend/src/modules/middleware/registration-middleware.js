@@ -2,7 +2,9 @@ import { User } from '../models/user-schema.js';
 import bcrypt from 'bcryptjs';
 
 export async function validateRegister(req, res, next) {
-  console.log('Request body', req.body);
+console.log('🟢 Entered validateRegister middleware');
+console.log('Request body:', req.body);
+
   try {
     const { username, password} = req.body;
 
@@ -21,7 +23,7 @@ export async function validateRegister(req, res, next) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Pass hashed password to next middleware/controller
-    req.body.hashedPassword = hashedPassword;
+    req.body.password = hashedPassword;
 
     next();
 

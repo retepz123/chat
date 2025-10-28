@@ -1,9 +1,17 @@
 import { User } from '../models/user-schema.js';
+import bcrypt from 'bcryptjs';
 
 export async function register(req, res) {
-  console.log('Request body', req.body);
+  console.log('🟡 Entered register controller');
+  console.log('Incoming body:', req.body);
+  
   try {
-    const { username, hashedPassword, email } = req.body;
+    const { username, password, email } = req.body;
+
+     //  Generate salt and hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
 
     // Save hashed password to DB
     const user = await User.create({

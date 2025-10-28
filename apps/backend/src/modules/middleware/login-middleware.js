@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 
 export async function validateLogin(req, res, next) {
   try {
+
+      console.log('Incoming body:', req.body);
+
     if (!req.body) {
       return res.status(400).json({ message: 'No request body provided' });
     }
@@ -30,7 +33,10 @@ export async function validateLogin(req, res, next) {
     next();
 
   } catch (err) {
-    console.error('Error in validateLogin middleware:', err);
-    return res.status(500).json({ message: 'Internal server error in middleware' });
-  }
+  console.error('Error in validateLogin middleware:', err.message, err.stack);
+  return res.status(500).json({ 
+    message: 'Internal server error in middleware', 
+    error: err.message 
+  });
+}
 }
