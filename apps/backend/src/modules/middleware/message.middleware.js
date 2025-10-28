@@ -28,10 +28,10 @@ export async function sendMessageSocket(Msgdata){
     if (!sender) throw new Error('Cannot find the user');
 
     const newMessage = await Message.create ({
-       sender: msgData.senderId,
-      content: msgData.content,
-      room: msgData.room,
-      attachments: msgData.attachments || [],
+       sender: Msgdata.senderId,
+      content: Msgdata.content,
+      room: Msgdata.room,
+      attachments: Msgdata.attachments || [],
     });
 
       await newMessage.populate('sender', 'username email');

@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
-import { sendMessageSocket } from './src/modules/controller/chat-controller.js'; // make sure this is exported correctly
+import  {sendMessageSocket}  from './src/modules/middleware/message.middleware.js'; // make sure this is exported correctly
 
 dotenv.config();
 
