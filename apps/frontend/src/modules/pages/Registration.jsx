@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast'; // ✅ corrected import
 import { Link } from 'react-router-dom';
 
-const SIGN_UP_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`;
+// const SIGN_UP_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`;
 
 function Registration() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function Registration() {
     }
 
     try {
-      const res = await fetch(SIGN_UP_URL, {
+      const res = await fetch('https://chat-me-qf7o.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
