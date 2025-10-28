@@ -54,7 +54,7 @@ function Registration() {
 
   return (
     <div>
-      <form onSubmit={handleRegister}>
+      <form>
         <h1>Sign up</h1>
         <div>
           <label htmlFor='username'>Username</label>
@@ -91,7 +91,7 @@ function Registration() {
           />
         </div>
 
-        <button type='submit'>Submit</button>
+        <button onClick={handleRegister} type='submit'>Submit</button>
         <Link to='/login' className='text-black-500'>Login</Link>
       </form>
     </div>
