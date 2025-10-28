@@ -5,41 +5,57 @@ function ChatPage() {
   const [message, setMessage] = useState([]);
   const [content, setContent] = useState("");
   const [room] = useState('general');
-  const senderId = '68fc47783e44cfa316e7be75';
 
-  //load message on mount
+  // Get logged-in user from localStorage
+ let storedUser = null;
+ try{
+  const userData = localStorage.getItem('user');
+  if (userData && userData !== 'undefined') {
+    storedUser = JSON.parse(userData);
+  }
+ } catch (err) {
+  console.error('Error in parsing the data from localstorage:', err);
+ }
+
+ const senderId = storedUser?._id;
+
+
+  // Load messages on mount
   useEffect(() => {
-    async function fetchMessages(){
+    async function fetchMessages() {
       const res = await getMessages(room);
       setMessage(res.data || []);
     }
     fetchMessages();
   }, [room]);
 
-  //send message
-  async function handleSend(e){
+  // Send message
+  async function handleSend(e) {
     e.preventDefault();
-    if (!content.trim())
+    if (!content.trim()) return;
+
+       if (!senderId) {
+      alert("You must be logged in to send messages!");
+       navigate('/login');
       return;
+    }
 
     const messageData = {
-      senderId: user?._id,
+      senderId,
       content,
       room,
       attachments: [],
     };
 
-
-     const res = await sendMessage(messageData);
+    const res = await sendMessage(messageData);
     if (res.data) {
       setMessage((prev) => [...prev, res.data]);
       setContent("");
     }
   }
 
-
   return (
-      <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
       <h2>Chat Room: {room}</h2>
 
       <div
@@ -79,4 +95,3 @@ function ChatPage() {
 }
 
 export default ChatPage;
-

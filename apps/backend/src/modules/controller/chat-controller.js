@@ -22,8 +22,10 @@ export async function sendMessage(req, res){
 
     await newMessage.save();
 
+    const populateMessage = await Message.findById(newMessage._id).populate('sender', 'username email');
+
     res.status(201).json({ message: 'Message sent successfully',
-      data: newMessage,
+      data: populateMessage,
     })
 
   } catch (err){
