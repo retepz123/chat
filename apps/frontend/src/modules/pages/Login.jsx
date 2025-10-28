@@ -12,7 +12,7 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('https://chat-me-qf7o.onrender.com', {
+      const res = await fetch('https://chat-me-qf7o.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ username, password }),
