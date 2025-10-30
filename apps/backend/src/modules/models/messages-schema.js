@@ -4,27 +4,22 @@ import { User } from './user-schema.js';
 
 
 const messagesSchema = new Schema ({
-  sender: {
+  senderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  content: {
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  text: {
     type: String,
-    required: true
   },
-  room: {
-    type: String,       // room name or roomId
-    required: true
+  image: {
+    type: String,
   },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  },
-  attachments: [{       // for images/files
-  url: { type: String, required: true },
-        type: { type: String, enum: ['image', 'video', 'file', 'pdf'], default: 'image' },
-  }]
 }, { timestamps: true });
 
 export const Message = mongoose.model('Message', messagesSchema);

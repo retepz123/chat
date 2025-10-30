@@ -1,37 +1,38 @@
-import {Message} from '../models/messages-schema.js';
+import { Message } from '../models/messages-schema.js';
 import { User } from '../models/user-schema.js';
 
 export async function sendMessage(req, res){
-  console.log('Request body', req.body);
-  try {
-    const { senderId, content, room, attachments } = req.body;
+  try{
+     const { text, image } = req.body;
+    const { id: receiverId} = req.params;
+    const senderId = req.user._id;
 
-    //validate user
-    const sender = await User.findById(senderId);
-    if (!sender) {
-      return res.status(400).json({ message: 'Cannot find the User'});
+    if (!text && !image) {
+  return res.status(400).json({ message: "Message must contain text or image" });
+}
+
+    let imageUrl;
+    if (image) {
+       const uploadResponse = await cloudinary.uploader.upload(image);
+       imageUrl = uploadResponse.secure_url;
     }
 
-    //create and save message
-    const newMessage = new Message({
-      sender: senderId,
-      content,
-      room,
-      attachments,
+    const newMessage = new Message ({
+      senderId,
+      receiverId,
+      text,
+      image: imageUrl,
     });
 
     await newMessage.save();
 
-    const populateMessage = await Message.findById(newMessage._id).populate('sender', 'username email');
+    //socket io
 
-    res.status(201).json({ message: 'Message sent successfully',
-      data: populateMessage,
-    })
+    return res.status(200).json(newMessage);
 
-  } catch (err){
-     console.error('Error sending message:', err);
-    res.status(500).json({ message: 'Internal server error' });
+  } catch(err){
+   console.error('Error fetching the messages', err);
+   return res.status(500).json({ message: 'Internal server Error in sendMessage'});
+
   }
-
 }
-

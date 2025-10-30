@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../components/lib/axios';
 
 const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`;
 
@@ -12,46 +13,30 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(LOGIN_URL, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ username, password }),
-      });
+        const res = await axiosInstance.post('/auth/login', { username, password });
 
-     let data;
-      try {
-        data = await res.json();
-      } catch {
-        const text = await res.text();
-        console.error('Non-JSON response from server:', text);
-        alert('Server error: invalid response format.');
-        return;
-      }
+      if (res.data?.token) {
+        // ✅ Save token and user info
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
 
+        console.log('Login successful:', res.data);
 
-      if(res.ok){
-
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        console.log('Login Successfully:', data);
-
-          setLoggedIn(true);
-
+        setLoggedIn(true);
       } else {
-        console.error('Login failed:', res.status, data.message);
-        alert(data.message || 'Invalid username and password');
+        alert('Login failed: token not received.');
       }
 
     } catch (err) {
-      console.error("Network or server error:", err);
-    alert("Something went wrong. Please check your internet connection or try again later.");
+      console.error('Login error:', err.response?.data || err.message);
+      alert(err.response?.data?.message || 'Invalid username or password');
     }
-  }
+  };
 
   useEffect(() => {
     if (loggedIn) {
-      const timer = setTimeout(() =>{
-        navigate('/chat');
+      const timer = setTimeout(() => {
+        navigate('/chat'); // 👈 redirect after login
       }, 500);
       return () => clearTimeout(timer);
     }

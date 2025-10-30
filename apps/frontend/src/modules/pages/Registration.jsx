@@ -1,99 +1,65 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast'; // ✅ corrected import
-import { Link } from 'react-router-dom';
-
-const SIGN_UP_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`;
-console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
+import { useAuthStore } from '../components/lib/auth';
+import { Link } from 'react-router';
+import LoginPage from './Login';
+import toast from 'react-hot-toast';
 
 function Registration() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
-    email: ''
   });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const { signup, isSigningUp } = useAuthStore();
+
+  const validateForm = () => {
+    if (!formData.username.trim())
+      return toast.error('Username is required');
+
+    if (!formData.email.trim())
+      return toast.error('Email is required');
+
+    if(!formData.password || formData.password.length < 6)
+      return toast.error('Password is required and it must be least 6 characters');
+
+    return true
+
   };
 
-  const handleRegister = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const username = form.username.trim();
-    const password = form.password;
-    const email = form.email.trim();
 
-    if (!username || !password || !email) {
-      alert('Please input the data');
-      return;
-    }
-
-    try {
-      const res = await fetch(SIGN_UP_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
-      });
-
-      const data = await res.json();
-      console.log(data);
-
-      if (res.ok) {
-        toast.success('Registered successfully! You can login now.');
-        setForm({ username: '', email: '', password: '' });
-        setTimeout(() => navigate('/login'), 1000);
-      } else {
-        toast.error(data.message || 'Registration failed');
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      toast.error('Error in connecting to the server');
-    }
+    const success = validateForm()
+    if(success === true) signup(formData);
   };
 
   return (
-    <div>
+    <div className='bg-red-500'>
+      <h1 className='text-yellow'>Sign Up</h1>
       <form>
-        <h1>Sign up</h1>
-        <div>
-          <label htmlFor='username'>Username</label>
-          <input
-            id='username'
-            name='username'
-            onChange={handleChange}
-            value={form.username}
-            required
-          />
-        </div>
+        <label type='username'>Username</label>
+        <input
+          type='text'
+          placeholder=''
+          value={formData.username}
+          onChange={(e) =>
+            setFormData({ ...formData, username: e.target.value })
+          }
+        />
 
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            id='password'
-            name='password'
-            type='password'
-            onChange={handleChange}
-            value={form.password}
-            required
-          />
-        </div>
+        <label type='email'>E-mail</label>
+        <input type='email' placeholder='' value={formData.email}
+        onChange={(e) => setFormData({...formData, email: e.target.value})} />
 
-        <div>
-          <label htmlFor='email'>Email</label>
-          <input
-            id='email'
-            name='email'
-            type='email'
-            onChange={handleChange}
-            value={form.email}
-            required
-          />
-        </div>
+          <label type='password'>Password</label>
+          <input type='password' placeholder='' value={formData.password}
+          onChange={(e) => setFormData({ ... formData, password: e.target.value})} />
 
-        <button onClick={handleRegister} type='submit'>Submit</button>
-        <Link to='/login' className='text-black-500'>Login</Link>
+          <button type='submit' >Create </button>
       </form>
+      <Link to='/login'>Login</Link>
     </div>
   );
 }

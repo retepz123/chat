@@ -1,100 +1,24 @@
-import { useEffect, useState } from 'react';
-import { getMessages, sendMessage } from '../components/api';
-import io from 'socket.io-client';
+import { useChatStore } from "../components/lib/useChat";
 
-const socket = io(import.meta.env.VITE_BACKEND_URL);
+import Sidebar from "../components/Sidebar";
+import NoChatSelected from "../components/NoChatSelected";
+import ChatContainer from "../components/ChatContainer";
 
-function ChatPage() {
-  const [message, setMessage] = useState([]);
-  const [content, setContent] = useState("");
-  const [room] = useState('general');
-
-  // Get logged-in user from localStorage
- let storedUser = null;
- try{
-  const userData = localStorage.getItem('user');
-  if (userData && userData !== 'undefined') {
-    storedUser = JSON.parse(userData);
-  }
- } catch (err) {
-  console.error('Error in parsing the data from localstorage:', err);
- }
-
- const senderId = storedUser?._id;
-
-
-  // Load messages on mount
-  useEffect(() => {
-    async function fetchMessages() {
-      const res = await getMessages(room);
-      setMessage(res.data || []);
-    }
-    fetchMessages();
-  }, [room]);
-
-  // Send message
-  async function handleSend(e) {
-    e.preventDefault();
-    if (!content.trim()) return;
-
-       if (!senderId) {
-      alert("You must be logged in to send messages!");
-       navigate('/login');
-      return;
-    }
-
-    const messageData = {
-      senderId,
-      content,
-      room,
-      attachments: [],
-    };
-
-    const res = await sendMessage(messageData);
-    if (res.data) {
-      setMessage((prev) => [...prev, res.data]);
-      setContent("");
-    }
-  }
+const HomePage = () => {
+  const { selectedUser } = useChatStore();
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
-      <h2>Chat Room: {room}</h2>
+    <div className="h-screen bg-base-200">
+      <div className="flex items-center justify-center pt-20 px-4">
+        <div className="bg-base-100 rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-8rem)]">
+          <div className="flex h-full rounded-lg overflow-hidden">
+            <Sidebar />
 
-      <div
-        style={{
-          border: "1px solid #ccc",
-          padding: 10,
-          height: 400,
-          overflowY: "auto",
-          marginBottom: 10,
-        }}
-      >
-        {message.length > 0 ? (
-          message.map((msg) => (
-            <div key={msg._id} style={{ marginBottom: 10 }}>
-              <strong>{msg.sender?.username || "Anonymous"}:</strong> {msg.content}
-            </div>
-          ))
-        ) : (
-          <p>No messages yet.</p>
-        )}
+            {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+          </div>
+        </div>
       </div>
-
-      <form onSubmit={handleSend}>
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          style={{ width: "80%", padding: 8 }}
-        />
-        <button type="submit" style={{ padding: 8, marginLeft: 5 }}>
-          Send
-        </button>
-      </form>
     </div>
   );
-}
-
-export default ChatPage;
+};
+export default HomePage;

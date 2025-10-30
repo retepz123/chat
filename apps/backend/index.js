@@ -7,7 +7,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
-import  {sendMessageSocket}  from './src/modules/middleware/message.middleware.js'; // make sure this is exported correctly
+import  {sendMessageSocket}  from './src/modules/middleware/message.middleware.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 console.log('JWT_SECRET:', JWT_SECRET);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors({ 
   origin: ["http://localhost:5173", "https://chat-frontend-hiq3.onrender.com"],
@@ -24,11 +25,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello World!' });
 });
 
+//routes
 app.use('/api/auth', registerRoutes);
 app.use('/api/v1', messageRoutes);
 
