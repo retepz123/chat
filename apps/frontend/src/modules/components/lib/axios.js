@@ -1,8 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`,
-  withCredentials: true,
-})
-
-
+  baseURL: "https://chat-me-qf7o.onrender.com/api", // your backend
+  withCredentials: true, // important: sends cookies cross-site
+});

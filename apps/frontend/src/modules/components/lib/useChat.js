@@ -10,17 +10,20 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
 
-  getUsers: async () => {
-    set({ isUsersLoading: true });
-    try {
-      const res = await axiosInstance.get("/v1/users");
-      set({ users: res.data });
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isUsersLoading: false });
-    }
-  },
+  getUsers: async (set) => {
+  set({ isUsersLoading: true });
+
+  try {
+    const res = await axiosInstance.get("/v1/users"); // cookies automatically sent
+    set({ users: res.data });
+  } catch (error) {
+    // safe optional chaining
+    const message = error.response?.data?.message || "Something went wrong";
+    toast.error(message);
+  } finally {
+    set({ isUsersLoading: false });
+  }
+},
 
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
