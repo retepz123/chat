@@ -14,7 +14,7 @@ export const useChatStore = create((set, get) => ({
   set({ isUsersLoading: true });
 
   try {
-    const res = await axiosInstance.get("/v1/users"); // cookies automatically sent
+  const res = await axios.get('/api/v1/users', { withCredentials: true }); 
     set({ users: res.data });
   } catch (error) {
     // safe optional chaining
