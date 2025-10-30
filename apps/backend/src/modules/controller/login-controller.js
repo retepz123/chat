@@ -20,6 +20,9 @@ export async function login(req, res) {
       return res.status(400).json({ message: 'User not set in request' });
     }
 
+    console.log('Entered login controller. req.user:', req.user);
+
+
     //token
     const token = jwt.sign(
       { id: user._id, username: user.username, email: user.email },

@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello World!' });
 });
 
+app.get('/api/test', (req, res) => {
+  res.json({ message: '✅ Backend route works!' });
+});
+
 //routes
 app.use('/api/auth', registerRoutes);
 app.use('/api/v1', messageRoutes);
