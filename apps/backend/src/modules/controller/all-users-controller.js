@@ -2,6 +2,7 @@ import { User } from '../models/user-schema.js';
 
 export async function getUsersForSide(req, res) {
   try {
+       console.log('👤 req.user:', req.user);
     const loggedUserId = req.user._id;
     const filteredUsers = await User.find({ _id: {$ne: loggedUserId }}).select('-password');
 

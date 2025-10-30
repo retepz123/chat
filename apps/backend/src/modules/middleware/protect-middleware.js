@@ -11,6 +11,7 @@ console.log("Decoded JWT:", decoded);
     const token = req.cookies.token; // match your cookie name token
 
     if (!token) {
+         console.log('❌ No token found in cookies');
       return res.status(401).json({ message: 'Unauthorized - No token provided' });
 
     }
@@ -20,6 +21,7 @@ console.log("Decoded JWT:", decoded);
     console.log('Token:', req.cookies.token);
     
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+       console.log('✅ Token decoded:', decoded);
 
     if (!decoded) {
       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
@@ -27,6 +29,7 @@ console.log("Decoded JWT:", decoded);
 
    
     const user = await User.findById(decoded.id).select('-password');
+      console.log('❌ User not found');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
