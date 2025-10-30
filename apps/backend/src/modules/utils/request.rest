@@ -20,9 +20,11 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
+###
+GET http://localhost:3000/api/v1/users
+
+
 ### send message
-
-
 POST http://localhost:3000/api/v1/send/69009383c9fc1f9c8e981b36
 Content-Type: application/json
 cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDA5MzgzYzlmYzFmOWM4ZTk4MWIzNiIsInVzZXJuYW1lIjoicGV0ZXJqb2huIiwiZW1haWwiOiJwZXRzQGdtYWlsLmNvbSIsImlhdCI6MTc2MTczMTAzMiwiZXhwIjoxNzY0MzIzMDMyfQ.SOtSSN-evT0JqqxjG447_G3B5arkBGAJO6nXHT_r_Gc
@@ -33,8 +35,6 @@ cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDA5MzgzYzlmYzFmO
   "image": ""
 }
 
-### all messages
-GET http://localhost:3000/api/v1/all/general
 
 ###
 POST http://localhost:3000/api/auth/logout

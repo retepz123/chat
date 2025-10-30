@@ -2,10 +2,6 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/user-schema.js';
 
 export async function protectMiddleware(req, res, next) {
-
-console.log("Incoming cookies:", req.cookies);
-console.log("Token from cookies:", req.cookies.token);
-console.log("Decoded JWT:", decoded);
   try {
    
     const token = req.cookies.token; // match your cookie name token
@@ -35,6 +31,7 @@ console.log("Decoded JWT:", decoded);
       return res.status(404).json({ message: 'User not found' });
     }
 
+     console.log('✅ User found:', user.username);
     req.user = user;
     next();
 
